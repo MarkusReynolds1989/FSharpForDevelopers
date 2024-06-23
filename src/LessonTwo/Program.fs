@@ -1,4 +1,4 @@
-﻿// Lesson 2.1
+﻿// Lesson 2.1 Immutability
 // When you use let to bind a variable it is immutable.
 let y = 3
 
@@ -33,14 +33,14 @@ let pureFunction inputOne inputTwo = inputOne + inputTwo
 // is called memoization.
 // It's also easier to test and debug these functions as they do one thing without altering anything else.
 
-// Exercise 2.1
+// Exercise 2.1 
 // Before moving on to the next sub-lesson create a function that takes the height and width of a rectangle
 // and returns its area.
 // Remember you can experiment in F# Interactive to get instant feedback.
 // Here's a starter signature:
 // let area height width = ??
 
-// Lesson 2.2
+// Lesson 2.2 Higher-Order Functions
 // Let's explore higher-order functions. We went over them a little bit in 1.6, but now we can explore what they are
 // about and what superpowers they unlock.
 
@@ -77,3 +77,26 @@ let upperCaseGroceries =
 // Map is a function that is included in the List module. Map is available for most collections and takes every item
 // and does some function on them and then collects the result. We are "mapping" an item to another item.
 
+// Next we will take a look at another very useful function, Filter.
+let justMilk =
+    List.filter (fun grocery -> grocery = "milk") groceries
+
+// Filter will go through and use a predicate on each item in the list and then if the predicate returns true the item
+// will go into a new list. The false items will be ignored and not brought into the new list.
+
+// Lastly, let's run a fold on the list. A fold runs a function against each item in the list
+// and accumulates the result as the return value.
+
+let groceryCount =
+    List.fold (fun acc _grocery -> acc + 1) 0 groceries
+
+// In this case we don't use the grocery itself in our calculation, so we just put an underscore at the start
+// to show we don't care about it. We could also have just put an underscore.
+
+// Exercise 2.2
+// Now try it yourself, create a list of your favorite foods and then count how many start with the letter p.
+// Hint: Because you are being asked for a count you should use a fold.
+
+// Lesson 2.3 Pattern Matching
+// Next we will talk in-depth about pattern matching. We went over it a little bit before, but now we will do a full
+// investigation of what it is and what it enables us to do.
