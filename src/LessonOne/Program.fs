@@ -1,4 +1,4 @@
-﻿// Lesson 1.5
+﻿// Lesson 1.5 Basic Syntax and Data Types
 
 // How to bind a value to a variable.
 let x = 3
@@ -52,3 +52,87 @@ for item in betterGroceryList do
 
 // Keep in mind that F# is whitespace sensitive and requires the use of tab to indent the next line
 // this is different from languages like C#, where whitespace is ignored.
+
+// Lesson 1.6 Simple Functions and Expressions
+// Functions are first class citizens in F# and are used everywhere. Many times when you might reach for a complicated
+// design pattern in another language, you can just use a function in F#.
+
+// Here we've created our first function. It is a function called helloFunction
+// that takes nothing (called unit and represented by ()) and returns a string.
+let helloFunction () = "Hello, World!"
+
+// We can call and use the helloFunction anywhere we want, we can also assign the result of a function to
+// a variable.
+// Note that () is there because helloFunction expects a unit.
+let result = helloFunction ()
+
+printfn $"{result}"
+
+// We could also call this function inside another function.
+let helloHelloFunction () = helloFunction ()
+
+let resultTwo = helloHelloFunction ()
+printfn $"{resultTwo}"
+
+// We can also create a function inside a function and return it.
+// This function doesn't return the result of helloWorld, it returns the function itself that will still need
+// to be called.
+let createHello () =
+    let helloWorld () = "Hello, World!"
+    helloWorld
+
+let nestedHello = createHello ()
+printfn $"{nestedHello ()}"
+
+// But supposed we wanted to actually give the function something to work on? And what if we want to pass in a function?
+// We will start with the first question.
+let helloPerson person = $"Hello, {person}!"
+
+// Notice that we didn't have to specify the type of the argument or the return type like in other languages
+// the compiler can usually determine the type for us.
+let helloTom = helloPerson "Tom"
+printfn $"{helloTom}"
+// The $"{item}" syntax is called 'string interpolation' which takes another string and plugs it into the spot
+// where the brackets are in this string.
+// Experiment by putting in your own name.
+
+// Finally, let's also see how we can pass a function into a function.
+let createHelloTwo baseHello person = $"{baseHello ()}, {person}!"
+
+let justHello () = "Hello"
+
+let helloTed = createHelloTwo justHello "Ted"
+printfn $"{helloTed}"
+// You can also pass functions with satisfying their arguments and then satisfying them later in other functions.
+// that's a more complicated idea we will explore more later.
+let unfinishedHelloWorld = createHelloTwo
+// Don't worry if this doesn't make sense yet.
+let helloJohn = unfinishedHelloWorld justHello "John"
+printfn $"{helloJohn}"
+
+// Next, we will look at expressions.
+// We've already looked at one expression, a loop.
+// A loop takes a collection, and then we can iterate over it.
+// The .. in 1..10 is shorthand to say we want every number from to 10.
+for i in 1..10 do
+    printfn $"{i}"
+
+// The next expression we want to look at is the 'if then' expression.
+if 1 > 0 then
+    do printfn "One is greater than 0"
+
+// Finally, let's take a look at the match expression, one of the most powerful expressions in F#.
+match helloJohn with
+| "Hello, John!" -> printfn "John was greeted."
+| "Hello, Tim!" -> printfn "This isn't possible."
+| _ -> printfn "This is for sure not possible."
+
+// These are all expressions because they all return something. In the case of using "printfn" a unit () is return.
+// But, other things could be returned as well. Any data type could be returned and used.
+let johnGreeted =
+    match helloJohn with
+    | "Hello, John!" -> true
+    | _ -> false
+// We are able to match on the variable helloJohn and see the value it holds.
+// We can match on the value of the variable and determine what the next step of the logic should be.
+// Notice the '_' character for any other case we don't cover. Otherwise called the default case.
