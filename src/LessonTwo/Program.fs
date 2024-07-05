@@ -100,3 +100,10 @@ let groceryCount =
 // Lesson 2.3 Pattern Matching
 // Next we will talk in-depth about pattern matching. We went over it a little bit before, but now we will do a full
 // investigation of what it is and what it enables us to do.
+
+// A simple pattern match:
+match 3 = 0 with
+| true -> printfn "How is this possible?"
+| false -> printfn "As expected."
+
+
