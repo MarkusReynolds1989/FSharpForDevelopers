@@ -8,6 +8,10 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Lesson2", "Lesson2\Lesson2.
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Lesson3", "Lesson3\Lesson3.fsproj", "{2F95B0AC-18A9-4F38-A787-45479AEFDEF1}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "EHRServer", "EHRServer\EHRServer.fsproj", "{4F4E66F3-DCA0-4288-88D4-6A42432EDD11}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "EHRFrontend", "EHRFrontend\EHRFrontend.fsproj", "{AAD5C018-8F04-4738-9167-E92FB06075DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,13 @@ Global
 		{2F95B0AC-18A9-4F38-A787-45479AEFDEF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F95B0AC-18A9-4F38-A787-45479AEFDEF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F95B0AC-18A9-4F38-A787-45479AEFDEF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F4E66F3-DCA0-4288-88D4-6A42432EDD11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F4E66F3-DCA0-4288-88D4-6A42432EDD11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F4E66F3-DCA0-4288-88D4-6A42432EDD11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F4E66F3-DCA0-4288-88D4-6A42432EDD11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAD5C018-8F04-4738-9167-E92FB06075DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAD5C018-8F04-4738-9167-E92FB06075DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAD5C018-8F04-4738-9167-E92FB06075DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAD5C018-8F04-4738-9167-E92FB06075DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
