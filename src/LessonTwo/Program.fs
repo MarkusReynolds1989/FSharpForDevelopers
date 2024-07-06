@@ -1,4 +1,6 @@
-﻿// Lesson 2.1 Immutability
+﻿open System.Collections.Generic
+
+// Lesson 2.1 Immutability
 // When you use let to bind a variable it is immutable.
 let y = 3
 
@@ -126,7 +128,7 @@ match x = 0 with
 
 // We can also match on collections, such as a list of groceries!
 match groceries with
-| ["milk"] -> printfn "There's only milk in the list, that's not right."
+| [ "milk" ] -> printfn "There's only milk in the list, that's not right."
 | [] -> printfn "The grocery list is empty!"
 | [ "bananas"; "milk"; "chips"; "eggs" ] -> printfn "This is the right list."
 // Notice the underscore to mean "anything else" this is a catchall in case it doesn't match anything else.
@@ -143,4 +145,52 @@ match groceries with
 // Lesson 2.4: Lists and Collections
 // There are a multitude of collections available in F# and they are all good for different things.
 // A list, or a linked-list, is good for situations where we need to go through every item in a collection
-// and do some sort of work with it. 
+// and do some sort of work with it.
+let groceryList = [ "banana"; "eggs" ]
+// A list can have any amount of data in it. The way a list works is that one node in the list is pointing to the next
+// item in the list. This is great for when we need to run linear algorithms, in that we will touch every element.
+// This is not great when we need to get a specific element because that will be a linear lookup, which is not
+// as efficient as some other collections. Lists are also immutable, you cannot change the elements of the list in
+// any way once it is set. You can only create a new list from the old one.
+let newList = List.updateAt 0 "milk" groceryList
+// Notice that we couldn't change the original list, we had to update the old list by creating a new one.
+
+// Another collection type we have to work with in F# is Arrays. Arrays work very similarly to how they work in other
+// languages. Looking up an item in the array by index is a constant time operation, unlike the linear lookup in
+// lists.
+let animals = [|"dog"; "cat"; "monkey"; "horse"|]
+// We can update any element we want of the array, but we can't grow or shrink the array, just like the list.
+animals[0] <- "mule"
+// Notice before how I was able to find a function to run on a collection. The collections usually have several
+// utility functions under their module. Before, I used List.updateAt, but there are also many Array functions as well.
+Array.length animals |> printfn "%d"
+let moreAnimals = Array.append animals [|"dog"; "frog"; "butterfly"|]
+// We can expand the array by taking the old array and adding a new array to it, then that addition
+// can be assigned to a new array. Keep in mind that these operations are linear space complexity.
+// There's also the Map collection, which is similar to a HashMap or collection of key value pairs.
+let groceryPrices = [("banana", 1.0); ("eggs", 4.00); ("milk", 5.00)] |> Map
+// Get the price of bananas.
+groceryPrices["banana"] |> ignore
+// We can't mutate a map either, if we want to do changes we have to create a new map.
+// Finally, we have the Seq collection. The Seq collection is a lazy collection that is used ot iterate over items
+// lazily. It is very similar to a stream.
+let sequence = seq [1;2;3;4]
+// In a normal program, this operation wouldn't start until the last possible moment when it's needed.
+// In other words, the sequence wouldn't be enumerated until forced to do so.
+let result = sequence |> Seq.map(fun x -> x + 1)
+// You can also use infinite sequences.
+let infiniteSequence = Seq.initInfinite id
+
+// What do we want to do in cases where we want to mutate collections?
+// We have the .NET libraries available for this! I will show two examples here for now and then
+// later we will go over more.
+// Remember Map from before is immutable, we can use .NET dictionaries as well that are fully mutable.
+let x = Dictionary<string, int>()
+// Mutating the collection is no problem, add, remove, etc.
+x.Add("banana", 1)
+x.Remove("banana") |> ignore
+
+// Resize array is a fully mutable version of the array from before. 
+let y = ResizeArray<int>()
+
+
