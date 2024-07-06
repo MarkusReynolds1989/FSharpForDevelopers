@@ -158,26 +158,26 @@ let newList = List.updateAt 0 "milk" groceryList
 // Another collection type we have to work with in F# is Arrays. Arrays work very similarly to how they work in other
 // languages. Looking up an item in the array by index is a constant time operation, unlike the linear lookup in
 // lists.
-let animals = [|"dog"; "cat"; "monkey"; "horse"|]
+let animals = [| "dog"; "cat"; "monkey"; "horse" |]
 // We can update any element we want of the array, but we can't grow or shrink the array, just like the list.
 animals[0] <- "mule"
 // Notice before how I was able to find a function to run on a collection. The collections usually have several
 // utility functions under their module. Before, I used List.updateAt, but there are also many Array functions as well.
 Array.length animals |> printfn "%d"
-let moreAnimals = Array.append animals [|"dog"; "frog"; "butterfly"|]
+let moreAnimals = Array.append animals [| "dog"; "frog"; "butterfly" |]
 // We can expand the array by taking the old array and adding a new array to it, then that addition
 // can be assigned to a new array. Keep in mind that these operations are linear space complexity.
 // There's also the Map collection, which is similar to a HashMap or collection of key value pairs.
-let groceryPrices = [("banana", 1.0); ("eggs", 4.00); ("milk", 5.00)] |> Map
+let groceryPrices = [ ("banana", 1.0); ("eggs", 4.00); ("milk", 5.00) ] |> Map
 // Get the price of bananas.
 groceryPrices["banana"] |> ignore
 // We can't mutate a map either, if we want to do changes we have to create a new map.
 // Finally, we have the Seq collection. The Seq collection is a lazy collection that is used ot iterate over items
 // lazily. It is very similar to a stream.
-let sequence = seq [1;2;3;4]
+let sequence = seq [ 1; 2; 3; 4 ]
 // In a normal program, this operation wouldn't start until the last possible moment when it's needed.
 // In other words, the sequence wouldn't be enumerated until forced to do so.
-let result = sequence |> Seq.map(fun x -> x + 1)
+let result = sequence |> Seq.map (fun x -> x + 1)
 // You can also use infinite sequences.
 let infiniteSequence = Seq.initInfinite id
 
@@ -190,7 +190,50 @@ let x = Dictionary<string, int>()
 x.Add("banana", 1)
 x.Remove("banana") |> ignore
 
-// Resize array is a fully mutable version of the array from before. 
+// Resize array is a fully mutable version of the array from before.
 let y = ResizeArray<int>()
+y.Add(3)
+y.Remove(3) |> ignore
+y.Add(34)
+// Notice that when we use the .NET libraries we have to "dot" into them instead of using a module + a function like
+// before. These are not functions, they are methods. They are attached to the data. We will not go too far indepth
+// into the difference here, but it's because .NET is object-oriented while F# is functional.
 
+// Exercise 2.4
+// Create a list, an array, and a sequence of different items. Experiment with the modules and the functions they have.
 
+// Lesson 2.5 Recursion
+// You may be familiar with loops in other languages and F# supports loops as well.
+for grocery in groceryList do
+    printfn $"{grocery}"
+
+let moreGroceries = [ "banana"; "milk"; "egg"; "cucumber"; "cheese"; "hot sauce" ]
+// However, this kind of control flow is messy and could lead to issues with side effects and having to maintain state
+// yourself. It could also become harder to read than a well-made recursive function.
+let rec printer inputList =
+    match inputList with
+    // Tail call, we are also calling the function as the last part of the recursion.
+    | head :: tail ->
+        printfn $"{head}"
+        printer tail
+    | [] -> ()
+
+// The rec keyword tells F# that the function is going to be tail call recursive. Tail in this case just means
+// the leg of the function that gets called last, if the recursion gets called in another spot it would be tail call
+// recursive and could lead to performance problems due to the compiler not being able to optimize the recursion.
+// Note that tail call optimization is set to off by default in debug builds.
+
+// Let's build a pure recursive function next.
+// Notice how we wrap the inner counter so that we can have some state outside to work on.
+let counter inputList =
+    let rec innerCount inputList count =
+        match inputList with
+        | head :: tail -> innerCount tail (count + 1)
+        | [] -> count
+
+    innerCount inputList 0
+// Note that we have only done recursion on lists but there's nothing stopping us from doing it on other collections
+// like a sequence either. It would just need a different setup for control flow.
+
+// Exercise 2.5
+// Build a recursive function that takes a list of numbers and returns a new list with only the even numbers from it.
