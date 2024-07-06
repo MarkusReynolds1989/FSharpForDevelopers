@@ -33,7 +33,7 @@ let pureFunction inputOne inputTwo = inputOne + inputTwo
 // is called memoization.
 // It's also easier to test and debug these functions as they do one thing without altering anything else.
 
-// Exercise 2.1 
+// Exercise 2.1
 // Before moving on to the next sub-lesson create a function that takes the height and width of a rectangle
 // and returns its area.
 // Remember you can experiment in F# Interactive to get instant feedback.
@@ -70,7 +70,7 @@ let groceries = [ "bananas"; "milk"; "chips"; "eggs" ]
 
 // This will take every string in the list and make them all capitalized. However, notice the .ToUpper()
 // syntax we used. This is called a "method call". This is different from a function because this functionality
-// is attached to the variable itself. 
+// is attached to the variable itself.
 let upperCaseGroceries =
     List.map (fun (grocery: string) -> grocery.ToUpper()) groceries
 
@@ -78,8 +78,7 @@ let upperCaseGroceries =
 // and does some function on them and then collects the result. We are "mapping" an item to another item.
 
 // Next we will take a look at another very useful function, Filter.
-let justMilk =
-    List.filter (fun grocery -> grocery = "milk") groceries
+let justMilk = List.filter (fun grocery -> grocery = "milk") groceries
 
 // Filter will go through and use a predicate on each item in the list and then if the predicate returns true the item
 // will go into a new list. The false items will be ignored and not brought into the new list.
@@ -87,8 +86,7 @@ let justMilk =
 // Lastly, let's run a fold on the list. A fold runs a function against each item in the list
 // and accumulates the result as the return value.
 
-let groceryCount =
-    List.fold (fun acc _grocery -> acc + 1) 0 groceries
+let groceryCount = List.fold (fun acc _grocery -> acc + 1) 0 groceries
 
 // In this case we don't use the grocery itself in our calculation, so we just put an underscore at the start
 // to show we don't care about it. We could also have just put an underscore.
@@ -106,4 +104,43 @@ match 3 = 0 with
 | true -> printfn "How is this possible?"
 | false -> printfn "As expected."
 
+// The components of a match are the match keyword, the expression or variable to match on, and then the with keyword.
+// The | bars will be evaluated from top to bottom. For instance, we will check if
+// 3 = 0 is true first before we check if it is false.
+// Alternatively, you can use the "function" keyword:
+3 = 0
+|> function
+    | true -> printfn "How is this possible"
+    | false -> printfn "As Expected."
 
+// There is also the concept of a "guard".
+// We use the "when" keyword to enhance our match even more and be more specific.
+let x = 3
+
+match x = 0 with
+| true when x > 2 -> printfn "3 is greater than 2, but it's not equal to 0."
+| false when x < 1 -> printfn "3 is not equal to 0, so that part is true, however it is not less than 1."
+| false when x > 1 -> printfn "This will work! x is greater than 1 and it is not equal to 0."
+| true -> printfn "This won't get touched, but it's best practice to always cover every possible outcome of a match."
+| false -> printfn "This won't get touched, but it's best practice to always cover every possible outcome of a match."
+
+// We can also match on collections, such as a list of groceries!
+match groceries with
+| ["milk"] -> printfn "There's only milk in the list, that's not right."
+| [] -> printfn "The grocery list is empty!"
+| [ "bananas"; "milk"; "chips"; "eggs" ] -> printfn "This is the right list."
+// Notice the underscore to mean "anything else" this is a catchall in case it doesn't match anything else.
+// This is an antipattern and should be avoided as much as possible. We should always be explicit with every
+// possible option.
+| _ -> printfn "For any other instance, won't be matched."
+
+// Matches are perfect for use in tandem with Discriminated Unions which we will get to in the next lesson, we
+// will cover matching on Discriminated Unions when we get to it.
+
+// Exercise 2.3
+// Try matches for yourself, try to see if you can print if the groceries list has a certain amount of groceries in it.
+
+// Lesson 2.4: Lists and Collections
+// There are a multitude of collections available in F# and they are all good for different things.
+// A list, or a linked-list, is good for situations where we need to go through every item in a collection
+// and do some sort of work with it. 
