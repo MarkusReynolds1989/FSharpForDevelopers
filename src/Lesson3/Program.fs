@@ -1,6 +1,7 @@
 ﻿// Lesson 3.1 Tuples and Records
 // We looked at tuples before, but let's do a refresher on them.
 // Let's say we want to make a patient named John so we create all his information:
+
 let john = "John", "Johnson", 23, 95.0, 1.9
 // The parts of the tuple here, separated by commas, are FirstName, LastName, Age, Weight, and Height.
 // How do I get the individual pieces of the tuple? There's a couple ways.
@@ -59,12 +60,80 @@ let johnsBloodType: BloodType = B
 match tedsBloodType with
 | A -> printfn "Starting A blood type transfusion."
 | B | O -> printfn "Shutting down, critical error, wrong blood type."
-// Notice that B and O do the same thing when they are matched, that is safer than adding a _ wildcard to handle anything else.
+// Notice that B and O do the same thing when they are matched, that is safer than adding
+// a _ wildcard to handle anything else.
+// Discriminated unions are also powerful enough to be used as a sort of record type as well, or to hold more
+// sophisticated types of data.
+// Supposed we wanted to add a note to go along with the blood type for some reason.
+type DUBloodType = A of string | B of string | O of string
+
+let tedsBloodTypeDU = A "Ted's blood is A."
+match tedsBloodTypeDU with
+// Notice that now when we match we put in a name for the extra item, so we can use it in the match branch.
+| A note -> printfn $"{note}"
+// Notice we discard the extra info here using the wildcard _ symbol.
+| B _ | O _ -> printfn "Shutting down, critical error, wrong blood type."
+
+// Exercise 3.2
+// Create a DU for a feature flag on a program. The user should be able to turn it on or off, if it is off
+// it has no value, if it is on it will take an integer. The feature is for how many tabs can be open at once.
 
 // Lesson 3.3 Option Types
+// Let's transition into another powerful type that is used a great deal in F# and progresses nicely from DUs, as it
+// is a DU.
+// The option type is a built-in type in F# that helps us to avoid things like having a null value.
+// Consider the situation where we need to get some info from the user but, we haven't got it yet.
+// In other languages, we would leave the string as null or an empty string until the user puts in the info.
+// In F#, we have a type specially for situations where we might have some data or no data.
+let mutable userInput = None
+// In this case, we have no data, and we also don't know what the data would resolve to if it was Some.
+userInput <- Some "Ted"
+// Now I've got the user input, I am going to mutate the username to "some" data. It's not none anymore.
+// I can match on an option type:
+match userInput with
+| None -> printfn "Please put in your name."
+| Some name -> printfn $"Thank you {name}."
+// Now we cannot run into a null value. We are considering every possible
+// condition of the data, whether it exists or not.
+// I will show you how we could get a null reference exception.
+let mutable johnName: string = null
+// I have a string but it has a null value, what will happen if I try to use it?
+johnName.ToCharArray() |> ignore
+// I can't use it because it's null! I get a null reference exception!
+// This would never have happened if I was using the option type:
+userInput <- None
+// See, the string value isn't exposed so, I can't do anything with it.
+// I can use value which is dangerous and could lead to an exception, but that's it. The normal pattern is to match
+// instead of directly unwrap so, it would be a code smell anyway.
+
+// Exercise 3.3
+// Write an option type for the blood type from above. Maybe we don't know the blood type yet so, we have to match on
+// if we have it or not to make a decision to give blood, we don't want to give the wrong blood.
 
 // Lesson 3.4 Result Types
+// Result types are also built in discriminated unions. They can be much better than exception handling in the right
+// situation. For instance, just because a map doesn't have a value we key we wouldn't want to throw an exception.
+let patientsWithKey = [(1234, "Ted"); (2345, "John")] |> Map
+// I'm using Guid here as a unique key for every patient that gets added to our system. Notice that it is the .NET
+// library style of Module + method, not Module + function.
+// Now what happens if we try to get a patient with a key that doesn't exist?
+patientsWithKey[1]
+// I got an exception when I tried to get a key outside the bounds of the map!
+// What could I do instead?
+// One option is to use the built in method, try get value which will return true with a value or false.
+let result = patientsWithKey.TryGetValue 1
+// This is fine because we can pass a bool up to check, but a more explicit way to do this would be to send an error
+// back up for us to check against.
+let result =
+    match patientsWithKey.TryGetValue(1) with
+    | true, patient -> Result.Ok patient
+    | false, _ -> Result.Error "Patient with ID 1 isn't in the hospital."
 
+let patientInHospital =
+   match result with
+   | Ok patient -> printfn $"{patient} is in the hospital."
+   | Error error -> printfn $"{error}"
+       
 // Lesson 3.5 More Collections?
 
 // Lesson 3.6 Maps and Sets
