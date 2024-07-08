@@ -54,7 +54,7 @@ let getAllFromPatients (patientData: PatientData) patients: PatientDataWithData 
    | PatientData.Height -> patients |> Seq.map (fun patient -> Height patient.Height)
    | PatientData.Weight -> patients |> Seq.map (fun patient -> Weight patient.Weight)
    | PatientData.BloodType -> patients |> Seq.map (fun patient -> BloodType patient.BloodType)
-
+    
 let getAmountFromPatients amount (patientData: PatientData) patients: PatientDataWithData seq =
     match patientData with
     | PatientData.FirstName -> patients |> Seq.take amount |> Seq.map (fun patient -> FirstName patient.FirstName)
@@ -100,7 +100,48 @@ let getAllWeights = createReport Get All PatientData.Weight patients
 // Create a report that gets all the patients ages.
 
 // Lesson 7.3 Using Active Patterns
+let (|ExtractFirstName|_|) (patient: Patient) =
+    Some (FirstName patient.FirstName)
+    
+let (|ExtractLastName|_|) (patient: Patient) =
+    Some (LastName patient.LastName)
 
+let (|ExtractAge|_|) (patient: Patient) =
+    Some (Age patient.Age)
+    
+let (|ExtractHeight|_|) (patient: Patient) =
+    Some (Height patient.Height)
+    
+let (|ExtractWeight|_|) (patient: Patient) =
+    Some (Weight patient.Weight)
+
+let (|ExtractBloodType|_|) (patient: Patient) =
+    Some (BloodType patient.BloodType)
+
+let getAmountFromPatientsAP amount (patientData: PatientData) patients =
+    let extractData patient =
+        match patientData with
+        | PatientData.FirstName -> (|ExtractFirstName|_|) patient
+        | PatientData.LastName -> (|ExtractLastName|_|) patient
+        | PatientData.Age -> (|ExtractAge|_|) patient
+        | PatientData.Height -> (|ExtractHeight|_|) patient
+        | PatientData.Weight -> (|ExtractWeight|_|) patient
+        | PatientData.BloodType -> (|ExtractBloodType|_|) patient
+    
+    patients
+    |> Seq.take amount
+    |> Seq.choose extractData
+    
+let createReportActivePatterns (report: PatientReport) (amount: Amount) (patientData: PatientData) patients =
+    match report with
+    | Get ->
+        match amount with
+        | All -> getAllFromPatients patientData patients
+        | Amount count ->  getAmountFromPatientsAP count patientData patients
+
+// Only returns the first age.
+let getSomeAges = createReport Get (Amount 1) PatientData.Age patients
 // Lesson 7.4 Computation Expressions
+// These have been great so far and much more simple to model after the domain, but we can get more sophisticated.
 
 // Lesson 7.5 Type Providers for DSLs
