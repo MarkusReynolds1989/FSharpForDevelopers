@@ -8,6 +8,9 @@
 
     <ItemGroup>
         <Compile Include="Program.fs"/>
+        <Content Include="patient_data.csv" />
+        <None Update="patient_data.csv">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
-
 </Project>

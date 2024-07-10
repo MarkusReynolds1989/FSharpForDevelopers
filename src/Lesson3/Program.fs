@@ -124,20 +124,20 @@ let patientsWithKey = [ (1234, "Ted"); (2345, "John") ] |> Map
 // I'm using Guid here as a unique key for every patient that gets added to our system. Notice that it is the .NET
 // library style of Module + method, not Module + function.
 // Now what happens if we try to get a patient with a key that doesn't exist?
-patientsWithKey[1]
+patientsWithKey[1] |> ignore
 // I got an exception when I tried to get a key outside the bounds of the map!
 // What could I do instead?
-// One option is to use the built in method, try get value which will return true with a value or false.
+// One option is to use the built-in method, try to get value which will return true with a value or false.
 let result = patientsWithKey.TryGetValue 1
 // This is fine because we can pass a bool up to check, but a more explicit way to do this would be to send an error
 // back up for us to check against.
-let result =
+let newResult =
     match patientsWithKey.TryGetValue(1) with
     | true, patient -> Result.Ok patient
     | false, _ -> Result.Error "Patient with ID 1 isn't in the hospital."
 
 let patientInHospital =
-    match result with
+    match newResult with
     | Ok patient -> printfn $"{patient} is in the hospital."
     | Error error -> printfn $"{error}"
 // Now we are getting much more specific information about if the patient is in the hospital or not.
@@ -162,9 +162,35 @@ let badHospitalUpdate = {badHospital with Patients = Seq.removeAt 0 patients }
 // passing the updated hospital instead. In that case, it would just be a function that takes the old
 // hospital and returns a new one.
 
-// Lesson 3.5 More Collections?
+// Lesson 3.5 More Collections
+// So far we've talked about list, seq, array, map, and a few .net collections, but we haven't fully explored
+// some of their more advanced use cases. We also haven't talked about a few other fundamental ones.
+// First, let's talk about seq and how we can use it. We can create something called a "generator function." This
+// function would take some sort of input, say lines from a file, and use a sequence computation expression to
+// generate (transform) data from it. Don't worry about computation expressions just yet, we will talk more about them
+// later.
+open System
+open System.IO
+let file = File.ReadAllLines("../FSharpForDevelopers/src/Lesson3/patient_data.csv")
 
-// Lesson 3.6 Maps and Sets
+let morePatients =
+    // The important thing to focus on here is the seq keyword.
+    seq {
+        for line in (file |> Seq.skip 1) do
+            // Then there is a loop.
+            let fields = line.Split(",")
+            // Then we use yield, this will add the item to the sequence.
+            yield {
+                FirstName = fields[0]
+                LastName = fields[1]
+                Age = Int32.Parse fields[2]
+                Height = Double.Parse fields[3]
+                Weight = Double.Parse fields[4] 
+            }
+    }
+// 
+
+// Lesson 3.6 Maps and Sets? We can go into more detail about maps and sets
 
 
 
