@@ -141,7 +141,13 @@ let createReportActivePatterns (report: PatientReport) (amount: Amount) (patient
 
 // Only returns the first age.
 let getSomeAges = createReport Get (Amount 1) PatientData.Age patients
+// Exercise 7.3
+// Add several more patients.
+// Build a report for the first ten patients blood types.
+
 // Lesson 7.4 Computation Expressions
 // These have been great so far and much more simple to model after the domain, but we can get more sophisticated.
+// We can now learn about computation expressions, we have already seen async and seq in action, but there are others,
+// and we can create our own.
 
 // Lesson 7.5 Type Providers for DSLs
