@@ -105,7 +105,11 @@ match userInput with
 // I will show you how we could get a null reference exception.
 let mutable johnName: string = null
 // I have a string but it has a null value, what will happen if I try to use it?
-johnName.ToCharArray() |> ignore
+// I'll wrap it in a try catch just in case, that way my program can still continue.
+try
+    johnName.ToCharArray() |> ignore
+with ex -> printfn $"{ex.Message}"
+
 // I can't use it because it's null! I get a null reference exception!
 // This would never have happened if I was using the option type:
 userInput <- None
@@ -124,7 +128,9 @@ let patientsWithKey = [ (1234, "Ted"); (2345, "John") ] |> Map
 // I'm using Guid here as a unique key for every patient that gets added to our system. Notice that it is the .NET
 // library style of Module + method, not Module + function.
 // Now what happens if we try to get a patient with a key that doesn't exist?
-patientsWithKey[1] |> ignore
+try 
+    patientsWithKey[1] |> ignore
+with ex -> printfn $"{ex.Message}"
 // I got an exception when I tried to get a key outside the bounds of the map!
 // What could I do instead?
 // One option is to use the built-in method, try to get value which will return true with a value or false.
@@ -171,7 +177,7 @@ let badHospitalUpdate = {badHospital with Patients = Seq.removeAt 0 patients }
 // later.
 open System
 open System.IO
-let file = File.ReadAllLines("../FSharpForDevelopers/src/Lesson3/patient_data.csv")
+let file = File.ReadAllLines("patient_data.csv")
 
 let morePatients =
     // The important thing to focus on here is the seq keyword.
@@ -188,6 +194,9 @@ let morePatients =
                 Weight = Double.Parse fields[4] 
             }
     }
+    |> Seq.toArray
+
+printfn $"%A{morePatients}"
 // 
 
 // Lesson 3.6 Maps and Sets? We can go into more detail about maps and sets
