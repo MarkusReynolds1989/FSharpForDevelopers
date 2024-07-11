@@ -177,6 +177,9 @@ let badHospitalUpdate = {badHospital with Patients = Seq.removeAt 0 patients }
 // later.
 open System
 open System.IO
+// This is a local path, you can choose either to move your fsi here or
+// copy the data to somewhere else to use it. If you build the project it will work
+// because this project gets carried over.
 let file = File.ReadAllLines("patient_data.csv")
 
 let morePatients =
@@ -197,7 +200,11 @@ let morePatients =
     |> Seq.toArray
 
 printfn $"%A{morePatients}"
-// 
+// Another thing we can do with arrays is get slices of them.
+// Suppose we just want the first two, we might want to use "Array.take" but
+// instead we can do:
+let twoPatients = morePatients[0..2]
+printfn $"%A{twoPatients}"
 
 // Lesson 3.6 Maps and Sets? We can go into more detail about maps and sets
 
