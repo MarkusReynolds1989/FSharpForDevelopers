@@ -203,10 +203,19 @@ printfn $"%A{morePatients}"
 // Another thing we can do with arrays is get slices of them.
 // Suppose we just want the first two, we might want to use "Array.take" but
 // instead we can do:
-let twoPatients = morePatients[0..2]
-printfn $"%A{twoPatients}"
+let threePatients = morePatients[0..2]
+printfn $"%A{threePatients}"
 
-// Lesson 3.6 Maps and Sets? We can go into more detail about maps and sets
+let duplicates = [| 1;1;1;1;1;2;2;2;2;3;3;3 |]
+// Lesson 3.6 Maps and Sets
+// Next, let's talk about a data structure we haven't seen yet, a set.
+// A set is very useful for when we want to only save unique items into a collection.
+let noDuplicates = Set duplicates
+printfn $"{noDuplicates}"
+// Observe when running that there are no duplicates.
+// There's also some very powerful 
+
+
 
 
 
