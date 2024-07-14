@@ -24,14 +24,38 @@ printfn $"{sameAsAbove 5}"
 let filterMapReduce =
     // We can combine as many functions as we want into one.
     List.filter (fun x -> x > 0) >> List.map (fun x -> x + 1) >> List.sort
-    
-let testList = [1;2;3;4]
+
+let testList = [ 1; 2; 3; 4 ]
 let result = filterMapReduce testList
 printfn $"{result}"
 // Lesson 4.2 Partial Application and Currying
+// Partial application is the process of fixing a number of arguments to a function, producing another
+// function of smaller arity.
+let add x y = x + y
+// This is partial application, this is a new function being returned here.
+let add5 = add 5
+printfn $"{add5 5}"
 
 // Lesson 4.3 Pipelines and Forward Operators
+// There are a few ways to set up pipelines, the easiest and clearest is to just use the pipe operator.
+let x = 5 |> (fun x -> x + 1) |> (fun x -> x * 2) |> (fun x -> x - 3)
+
+// I am piping the collection into a function, and then I can pipe the results of that function into yet another one.
+// I can keep forwarding the data onto each function as much as I'd like.
+// We can also pass in a collection of functions into a function and pipe the collection through there.
+let pipeline x functions =
+    List.fold (fun acc f -> f acc) x functions
+
+let pipeResult = pipeline 5 [ (fun x -> x + 1); (fun x -> x * 2); (fun x -> x - 3) ]
+// This way is more useful when we want to create the collection of functions programmatically and then apply
+// those functions to values.
 
 // Lesson 4.4 Anonymous Functions
+// We've been using anonymous functions this whole time, it looks like this:
+// (fun x -> x + 1)
+// You can bind this function if you want or just directly send it arguments.
+let anon = (fun x -> x + 1)
+let anonResult = anon 1
+printfn $"{anonResult}"
 
 // Lesson 4.5 Map, Filter, Fold
