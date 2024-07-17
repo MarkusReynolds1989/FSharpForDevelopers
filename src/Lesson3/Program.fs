@@ -163,7 +163,7 @@ let badHospital =
 // We have no problem reassigning the patient list every time we get new ones or some check out, but we
 // don't have a way to change bad hospital without mutating it, which we don't want to do.
 // badHospital.Patients <- Seq.empty This won't work!
-// Luckily, there's a built in way to update a record in F#.
+// Luckily, there's a built-in way to update a record in F#.
 let badHospitalUpdate =
     { badHospital with
         Patients = Seq.removeAt 0 patients }

@@ -50,6 +50,12 @@ let pipeResult = pipeline 5 [ (fun x -> x + 1); (fun x -> x * 2); (fun x -> x - 
 // This way is more useful when we want to create the collection of functions programmatically and then apply
 // those functions to values.
 
+// We can also pipe a tuple into a function.
+// Notice that we use the ||> double pipe to pipe this tuple into the fold instead of adding them as arguments
+// at the end.
+// This will print 10.
+printfn $"{(0, [| 1; 2; 3; 4 |]) ||> Array.fold (fun x y -> x + y)}"
+
 // Lesson 4.4 Anonymous Functions
 // We've been using anonymous functions this whole time, it looks like this:
 // (fun x -> x + 1)
@@ -57,5 +63,9 @@ let pipeResult = pipeline 5 [ (fun x -> x + 1); (fun x -> x * 2); (fun x -> x - 
 let anon = (fun x -> x + 1)
 let anonResult = anon 1
 printfn $"{anonResult}"
+// The way we write functions is syntatic sugar for binding a function to a name:
+let other item = item + 1
+// This is equivalent to the non function above, but it's a named function. Look at the signature to confirm.
+
 
 // Lesson 4.5 Map, Filter, Fold
