@@ -192,6 +192,7 @@ x.Remove("banana") |> ignore
 
 // Resize array is a fully mutable version of the array from before.
 let y = ResizeArray<int>()
+
 y.Add(3)
 y.Remove(3) |> ignore
 y.Add(34)

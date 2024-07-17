@@ -13,5 +13,4 @@ open Xunit
 open Giraffe
 
 [<Fact>]
-let ``My test`` () =
-    Assert.Equal(1, 1)
+let ``My test`` () = Assert.Equal(1, 1)

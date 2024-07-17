@@ -30,7 +30,7 @@ type PatientData =
     | Height
     | Weight
     | BloodType
-    
+
 type PatientDataWithData =
     | FirstName of string
     | LastName of string
@@ -43,53 +43,59 @@ type Amount =
     | All
     | Amount of int
 
-type PatientReport =
-    | Get
+type PatientReport = | Get
 
-let getAllFromPatients (patientData: PatientData) patients: PatientDataWithData seq =
-   match patientData with
-   | PatientData.FirstName -> patients |> Seq.map (fun patient -> FirstName patient.FirstName)
-   | PatientData.LastName -> patients |> Seq.map (fun patient -> LastName patient.LastName)
-   | PatientData.Age -> patients |> Seq.map (fun patient -> Age patient.Age)
-   | PatientData.Height -> patients |> Seq.map (fun patient -> Height patient.Height)
-   | PatientData.Weight -> patients |> Seq.map (fun patient -> Weight patient.Weight)
-   | PatientData.BloodType -> patients |> Seq.map (fun patient -> BloodType patient.BloodType)
-    
-let getAmountFromPatients amount (patientData: PatientData) patients: PatientDataWithData seq =
+let getAllFromPatients (patientData: PatientData) patients : PatientDataWithData seq =
     match patientData with
-    | PatientData.FirstName -> patients |> Seq.take amount |> Seq.map (fun patient -> FirstName patient.FirstName)
-    | PatientData.LastName -> patients |> Seq.take amount |> Seq.map (fun patient -> LastName patient.LastName)
+    | PatientData.FirstName -> patients |> Seq.map (fun patient -> FirstName patient.FirstName)
+    | PatientData.LastName -> patients |> Seq.map (fun patient -> LastName patient.LastName)
+    | PatientData.Age -> patients |> Seq.map (fun patient -> Age patient.Age)
+    | PatientData.Height -> patients |> Seq.map (fun patient -> Height patient.Height)
+    | PatientData.Weight -> patients |> Seq.map (fun patient -> Weight patient.Weight)
+    | PatientData.BloodType -> patients |> Seq.map (fun patient -> BloodType patient.BloodType)
+
+let getAmountFromPatients amount (patientData: PatientData) patients : PatientDataWithData seq =
+    match patientData with
+    | PatientData.FirstName ->
+        patients
+        |> Seq.take amount
+        |> Seq.map (fun patient -> FirstName patient.FirstName)
+    | PatientData.LastName ->
+        patients
+        |> Seq.take amount
+        |> Seq.map (fun patient -> LastName patient.LastName)
     | PatientData.Age -> patients |> Seq.take amount |> Seq.map (fun patient -> Age patient.Age)
     | PatientData.Height -> patients |> Seq.take amount |> Seq.map (fun patient -> Height patient.Height)
     | PatientData.Weight -> patients |> Seq.take amount |> Seq.map (fun patient -> Weight patient.Weight)
-    | PatientData.BloodType -> patients |> Seq.take amount |> Seq.map (fun patient -> BloodType patient.BloodType)
-    
+    | PatientData.BloodType ->
+        patients
+        |> Seq.take amount
+        |> Seq.map (fun patient -> BloodType patient.BloodType)
+
 let createReport (report: PatientReport) (amount: Amount) (patientData: PatientData) patients =
     match report with
     | Get ->
         match amount with
         | All -> getAllFromPatients patientData patients
-        | Amount count ->  getAmountFromPatients count patientData patients
+        | Amount count -> getAmountFromPatients count patientData patients
 
-let ted = {
-    FirstName = "Ted"
-    LastName = "Tedson"
-    Age = 33
-    Height = 1.9
-    Weight = 95.0
-    BloodType = A 
-}
+let ted =
+    { FirstName = "Ted"
+      LastName = "Tedson"
+      Age = 33
+      Height = 1.9
+      Weight = 95.0
+      BloodType = A }
 
-let john = {
-    FirstName = "John"
-    LastName = "Johnson"
-    Age = 44
-    Height = 1.95 
-    Weight = 100.0
-    BloodType = B
-}
+let john =
+    { FirstName = "John"
+      LastName = "Johnson"
+      Age = 44
+      Height = 1.95
+      Weight = 100.0
+      BloodType = B }
 
-let patients = seq [john; ted]
+let patients = seq [ john; ted ]
 // Now we can take this function and expose it like so:
 // Now to create the report they just need to remember "createReport", and a few other commands that we can match on.
 let getAllWeights = createReport Get All PatientData.Weight patients
@@ -100,23 +106,17 @@ let getAllWeights = createReport Get All PatientData.Weight patients
 // Create a report that gets all the patients ages.
 
 // Lesson 7.3 Using Active Patterns
-let (|ExtractFirstName|_|) (patient: Patient) =
-    Some (FirstName patient.FirstName)
-    
-let (|ExtractLastName|_|) (patient: Patient) =
-    Some (LastName patient.LastName)
+let (|ExtractFirstName|_|) (patient: Patient) = Some(FirstName patient.FirstName)
 
-let (|ExtractAge|_|) (patient: Patient) =
-    Some (Age patient.Age)
-    
-let (|ExtractHeight|_|) (patient: Patient) =
-    Some (Height patient.Height)
-    
-let (|ExtractWeight|_|) (patient: Patient) =
-    Some (Weight patient.Weight)
+let (|ExtractLastName|_|) (patient: Patient) = Some(LastName patient.LastName)
 
-let (|ExtractBloodType|_|) (patient: Patient) =
-    Some (BloodType patient.BloodType)
+let (|ExtractAge|_|) (patient: Patient) = Some(Age patient.Age)
+
+let (|ExtractHeight|_|) (patient: Patient) = Some(Height patient.Height)
+
+let (|ExtractWeight|_|) (patient: Patient) = Some(Weight patient.Weight)
+
+let (|ExtractBloodType|_|) (patient: Patient) = Some(BloodType patient.BloodType)
 
 let getAmountFromPatientsAP amount (patientData: PatientData) patients =
     let extractData patient =
@@ -127,17 +127,15 @@ let getAmountFromPatientsAP amount (patientData: PatientData) patients =
         | PatientData.Height -> (|ExtractHeight|_|) patient
         | PatientData.Weight -> (|ExtractWeight|_|) patient
         | PatientData.BloodType -> (|ExtractBloodType|_|) patient
-    
-    patients
-    |> Seq.take amount
-    |> Seq.choose extractData
-    
+
+    patients |> Seq.take amount |> Seq.choose extractData
+
 let createReportActivePatterns (report: PatientReport) (amount: Amount) (patientData: PatientData) patients =
     match report with
     | Get ->
         match amount with
         | All -> getAllFromPatients patientData patients
-        | Amount count ->  getAmountFromPatientsAP count patientData patients
+        | Amount count -> getAmountFromPatientsAP count patientData patients
 
 // Only returns the first age.
 let getSomeAges = createReport Get (Amount 1) PatientData.Age patients

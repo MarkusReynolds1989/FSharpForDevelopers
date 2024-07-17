@@ -1,5 +1,4 @@
-﻿open System
-open System.IO
+﻿open System.IO
 // Lesson 5.1 Introduction to Asynchronous Programming
 
 // Lesson 5.2 Async Workflows
@@ -14,8 +13,8 @@ async {
 // Async is different from Parallel, but they are related.
 // We can load several different files at once depending on how many cores we have.
 async {
+    // These will all run at the same time.
     let! results =
-        // These will all run at the same time.
         [ File.ReadAllLinesAsync(path) |> Async.AwaitTask
           File.ReadAllLinesAsync(path) |> Async.AwaitTask
           File.ReadAllLinesAsync(path) |> Async.AwaitTask ]
@@ -25,7 +24,7 @@ async {
     ()
 }
 // Then, the whole thing will start, but it will run in the background across the threads.
-// Let's look at what is happening with profiling so we can see the different threads.
+// Let's look at what is happening with profiling so, we can see the different threads.
 |> Async.Start
 
 // Lesson 5.3 Parallel Programming

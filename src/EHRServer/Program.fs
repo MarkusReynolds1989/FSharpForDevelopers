@@ -13,7 +13,9 @@ let webApp (logger: ILogger) =
           POST >=> choose [ route "/fake" >=> text "I'm a snake." ] ]
 
 let configureApp (app: IApplicationBuilder) =
-    let logger = app.ApplicationServices.GetRequiredService(typeof<ILogger<obj>>) :?> ILogger
+    let logger =
+        app.ApplicationServices.GetRequiredService(typeof<ILogger<obj>>) :?> ILogger
+
     app.UseGiraffe(webApp logger)
 
 let configureServices (services: IServiceCollection) = services.AddGiraffe() |> ignore

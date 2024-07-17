@@ -108,7 +108,8 @@ let mutable johnName: string = null
 // I'll wrap it in a try catch just in case, that way my program can still continue.
 try
     johnName.ToCharArray() |> ignore
-with ex -> printfn $"{ex.Message}"
+with ex ->
+    printfn $"{ex.Message}"
 
 // I can't use it because it's null! I get a null reference exception!
 // This would never have happened if I was using the option type:
@@ -128,9 +129,10 @@ let patientsWithKey = [ (1234, "Ted"); (2345, "John") ] |> Map
 // I'm using Guid here as a unique key for every patient that gets added to our system. Notice that it is the .NET
 // library style of Module + method, not Module + function.
 // Now what happens if we try to get a patient with a key that doesn't exist?
-try 
+try
     patientsWithKey[1] |> ignore
-with ex -> printfn $"{ex.Message}"
+with ex ->
+    printfn $"{ex.Message}"
 // I got an exception when I tried to get a key outside the bounds of the map!
 // What could I do instead?
 // One option is to use the built-in method, try to get value which will return true with a value or false.
@@ -162,7 +164,9 @@ let badHospital =
 // don't have a way to change bad hospital without mutating it, which we don't want to do.
 // badHospital.Patients <- Seq.empty This won't work!
 // Luckily, there's a built in way to update a record in F#.
-let badHospitalUpdate = {badHospital with Patients = Seq.removeAt 0 patients }
+let badHospitalUpdate =
+    { badHospital with
+        Patients = Seq.removeAt 0 patients }
 // We removed Ted so now the hospital is empty!
 // We are doing this update manually via the code here, but imagine a long running process where we are
 // passing the updated hospital instead. In that case, it would just be a function that takes the old
@@ -189,13 +193,12 @@ let morePatients =
             // Then there is a loop.
             let fields = line.Split(",")
             // Then we use yield, this will add the item to the sequence.
-            yield {
-                FirstName = fields[0]
-                LastName = fields[1]
-                Age = Int32.Parse fields[2]
-                Height = Double.Parse fields[3]
-                Weight = Double.Parse fields[4] 
-            }
+            yield
+                { FirstName = fields[0]
+                  LastName = fields[1]
+                  Age = Int32.Parse fields[2]
+                  Height = Double.Parse fields[3]
+                  Weight = Double.Parse fields[4] }
     }
     |> Seq.toArray
 
@@ -206,16 +209,11 @@ printfn $"%A{morePatients}"
 let threePatients = morePatients[0..2]
 printfn $"%A{threePatients}"
 
-let duplicates = [| 1;1;1;1;1;2;2;2;2;3;3;3 |]
+let duplicates = [| 1; 1; 1; 1; 1; 2; 2; 2; 2; 3; 3; 3 |]
 // Lesson 3.6 Maps and Sets
 // Next, let's talk about a data structure we haven't seen yet, a set.
 // A set is very useful for when we want to only save unique items into a collection.
 let noDuplicates = Set duplicates
 printfn $"{noDuplicates}"
 // Observe when running that there are no duplicates.
-// There's also some very powerful 
-
-
-
-
-
+// There's also some very powerful
